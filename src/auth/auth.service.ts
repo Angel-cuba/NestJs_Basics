@@ -31,6 +31,7 @@ export class AuthService {
     if (!valid) throw new ForbiddenException('Invalid credentials');
     // if password is correct, return the user
     delete user.hash;
+    //return user;
     return this.signToken(user.id, user.email);
   }
 
@@ -56,15 +57,9 @@ export class AuthService {
           email: dto.email,
           hash,
         },
-        // select: {
-        //   id: true,
-        //   email: true,
-        //   createdAt: true,
-        // },
       });
       delete user.hash;
-      // return the saved user
-      return user;
+      return this.signToken(user.id, user.email);
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
